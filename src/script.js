@@ -28,11 +28,14 @@ const particleTexture = textureLoader.load('/textures/particles/2.png');
 
 // Custom
 const particlesGeometry = new THREE.BufferGeometry();
-const count = 5000;
+const count = 20000;
+
 const positions = new Float32Array(count * 3); // Special array, accounting for x, y, z values (we need 500 * 3 items in the array)
+const colors = new Float32Array(count * 3); // Special array, setting the rgb colors
 
 for (let index = 0; index < count * 3; index++) {
   positions[index] = (Math.random() - 0.5) * 10; // Filling array. To get values from -5 to 5, instead of 0 to 1
+  colors[index] = Math.random(); // Setting random values for rgb
 }
 
 particlesGeometry.setAttribute(
@@ -40,17 +43,24 @@ particlesGeometry.setAttribute(
   new THREE.BufferAttribute(positions, 3) // Specifying we need 3 values
 );
 
+particlesGeometry.setAttribute(
+  'color',
+  new THREE.BufferAttribute(colors, 3) // Specifying we need 3 values
+);
+
 // Material
 const particlesMaterial = new THREE.PointsMaterial({
   size: 0.1,
   sizeAttenuation: true, // Determines the size of the geometry depending on the camera position
-  color: '#ff88cc',
+  //   color: '#ff88cc',
 });
 particlesMaterial.transparent = true; // Make particles transparent
 particlesMaterial.alphaMap = particleTexture; // Assigning texture
 // particlesMaterial.alphaTest = 0.001; // Tells the GPU to ignore black
 // particlesMaterial.depthTest = false; // WebGL tests if the particle is in front, could create bugs if other objects or colors
 particlesMaterial.depthWrite = false; //Measures distance between objects and does not draw particles in that distance
+particlesMaterial.blending = THREE.AdditiveBlending; // The color is added unto whats already there, combining light. Impacts performance
+particlesMaterial.vertexColors = true; // Assigning colors to each particle
 
 // Points
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
