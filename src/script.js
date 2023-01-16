@@ -122,6 +122,19 @@ const clock = new THREE.Clock();
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
+  // Update particles
+  //   particles.rotation.y = elapsedTime * 0.2;
+  for (let index = 0; index < count; index++) {
+    const i3 = index * 3;
+
+    const x = particlesGeometry.attributes.position.array[i3];
+    particlesGeometry.attributes.position.array[i3 + 1] = Math.sin(
+      elapsedTime + x
+    );
+  }
+
+  particlesGeometry.attributes.position.needsUpdate = true; // Don't so this. Too much work for computer
+
   // Update controls
   controls.update();
 
