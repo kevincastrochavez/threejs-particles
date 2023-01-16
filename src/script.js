@@ -19,6 +19,7 @@ const scene = new THREE.Scene();
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
+const particleTexture = textureLoader.load('/textures/particles/2.png');
 
 // P A R T I C L E S
 
@@ -41,9 +42,15 @@ particlesGeometry.setAttribute(
 
 // Material
 const particlesMaterial = new THREE.PointsMaterial({
-  size: 0.01,
+  size: 0.1,
   sizeAttenuation: true, // Determines the size of the geometry depending on the camera position
+  color: '#ff88cc',
 });
+particlesMaterial.transparent = true; // Make particles transparent
+particlesMaterial.alphaMap = particleTexture; // Assigning texture
+// particlesMaterial.alphaTest = 0.001; // Tells the GPU to ignore black
+// particlesMaterial.depthTest = false; // WebGL tests if the particle is in front, could create bugs if other objects or colors
+particlesMaterial.depthWrite = false; //Measures distance between objects and does not draw particles in that distance
 
 // Points
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
