@@ -23,10 +23,26 @@ const textureLoader = new THREE.TextureLoader();
 // P A R T I C L E S
 
 // Geometry
-const particlesGeometry = new THREE.SphereGeometry(1, 32, 32);
+// const particlesGeometry = new THREE.SphereGeometry(1, 32, 32);
+
+// Custom
+const particlesGeometry = new THREE.BufferGeometry();
+const count = 5000;
+const positions = new Float32Array(count * 3); // Special array, accounting for x, y, z values (we need 500 * 3 items in the array)
+
+for (let index = 0; index < count * 3; index++) {
+  positions[index] = (Math.random() - 0.5) * 10; // Filling array. To get values from -5 to 5, instead of 0 to 1
+}
+
+particlesGeometry.setAttribute(
+  'position',
+  new THREE.BufferAttribute(positions, 3) // Specifying we need 3 values
+);
+
+// Material
 const particlesMaterial = new THREE.PointsMaterial({
-  size: 0.02,
-  sizeAttenuation: true,
+  size: 0.01,
+  sizeAttenuation: true, // Determines the size of the geometry depending on the camera position
 });
 
 // Points
